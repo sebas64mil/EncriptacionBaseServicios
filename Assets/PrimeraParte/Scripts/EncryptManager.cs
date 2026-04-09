@@ -12,21 +12,21 @@ public class EncryptManager : MonoBehaviour
     private RSA rsa;
     private string encryptedText;
 
-    private void Awake()
+    private void Awake() // An instance is created and the key size is determined _/\_ Se crea una instancia y determina el tamaño de la clave 
     {
         rsa = RSA.Create();
-        rsa.KeySize = 2048;
+        rsa.KeySize = 2048; 
     }
 
     public void EncryptHash()
     {
-        if (string.IsNullOrEmpty(hashInput.text))
+        if (string.IsNullOrEmpty(hashInput.text)) //verify that the text field is not empty _/\_ verifica que el campo de texto no esté vacío
         {
             resultText.text = "Hash vacío";
             return;
         }
 
-        try
+        try // Convert the hash to bytes, sign it with the private key, and convert it to text _/\_ Convierte el hash a bytes, firma con la clave privada y lo convierte a texto
         {
             byte[] hashBytes = HexStringToByteArray(hashInput.text);
 
@@ -45,7 +45,7 @@ public class EncryptManager : MonoBehaviour
         }
     }
 
-    public void CopyEncrypted()
+    public void CopyEncrypted() // Copy the encrypted text to the clipboard _/\_ Copia el texto encriptado al portapapeles
     {
         if (!string.IsNullOrEmpty(encryptedText))
         {
@@ -54,12 +54,12 @@ public class EncryptManager : MonoBehaviour
         }
     }
 
-    public RSA GetRSA()
+    public RSA GetRSA() 
     {
         return rsa;
     }
 
-    private static byte[] HexStringToByteArray(string hex)
+    private static byte[] HexStringToByteArray(string hex) // class used to convert to a byte array _/\_ clase que se usa para convertir a un arreglo de bytes
     {
         if (string.IsNullOrEmpty(hex))
             return Array.Empty<byte>();
