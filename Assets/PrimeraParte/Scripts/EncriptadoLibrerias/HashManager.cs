@@ -4,18 +4,16 @@ using System.Security.Cryptography;
 using UnityEngine;
 using TMPro;
 
-public class HashManager : MonoBehaviour
+public class HashManager : MonoBehaviour, IHashManager
 {
     [Header("UI")]
     public TMP_InputField inputText;
 
     private string lastHash;
 
-    public void GenerateHash() // It generates a SHA256 hash from the text and displays it _/\_ Genera un hash SHA256 a partir del texto y lo muestra
+    public void GenerateHash()
     {
-
-
-        byte[] data = Encoding.UTF8.GetBytes(inputText.text); // Convert the text to bytes _/\_ Convierte el texto a bytes
+        byte[] data = Encoding.UTF8.GetBytes(inputText.text);
 
         byte[] hash;
         using (var sha = SHA256.Create())
@@ -23,11 +21,11 @@ public class HashManager : MonoBehaviour
             hash = sha.ComputeHash(data);
         }
 
-        lastHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant(); // Convert the hash to a hexadecimal string _/\_ Convierte el hash a hexadecimal
+        lastHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         Debug.Log($"[HashManager] hash = {lastHash}");
     }
 
-    public void CopyHash() // Copy the last generated hash to the clipboard _/\_ Copia el último hash generado al portapapeles
+    public void CopyHash()
     {
         if (!string.IsNullOrEmpty(lastHash))
         {

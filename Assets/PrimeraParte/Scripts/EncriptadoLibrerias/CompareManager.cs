@@ -25,6 +25,6 @@ public class CompareManager : MonoBehaviour
         }
 
         bool match = hash1 == hash2;
-        Debug.Log(match ? "[CompareManager] ✅ Hashes coinciden" : "[CompareManager] ❌ Hashes diferentes");
+        Debug.Log(match ? "[CompareManager]  Hashes coinciden" : "[CompareManager]  Hashes diferentes");
     }
 }

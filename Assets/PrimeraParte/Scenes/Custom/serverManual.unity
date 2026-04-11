@@ -429,8 +429,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TCPServerUI
   serverPort: 5555
   serverReference: {fileID: 913333489}
-  hashManager: {fileID: 820263434}
-  encryptManager: {fileID: 820263433}
+  hashManagerBehaviour: {fileID: 820263436}
+  encryptManagerBehaviour: {fileID: 820263437}
 --- !u!1 &153297976
 GameObject:
   m_ObjectHideFlags: 0
@@ -1818,9 +1818,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 820263434}
-        m_TargetAssemblyTypeName: HashManager, Assembly-CSharp
-        m_MethodName: CopyHash
+      - m_Target: {fileID: 820263437}
+        m_TargetAssemblyTypeName: EncryptManagerManual, Assembly-CSharp
+        m_MethodName: CopyEncrypted
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2139,8 +2139,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 820263435}
-  - component: {fileID: 820263434}
-  - component: {fileID: 820263433}
+  - component: {fileID: 820263436}
+  - component: {fileID: 820263437}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -2148,32 +2148,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &820263433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 820263432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a77e08cb9d111a4ab990d2988e77f6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EncryptManager
-  hashInput: {fileID: 2041285463}
---- !u!114 &820263434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 820263432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c701c38d753514d45a91a12896ccb08a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HashManager
-  inputText: {fileID: 776432795}
 --- !u!4 &820263435
 Transform:
   m_ObjectHideFlags: 0
@@ -2189,6 +2163,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &820263436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820263432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6431dbf1534a546b48d3783cea3037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HashManaherManual
+  inputText: {fileID: 776432795}
+--- !u!114 &820263437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820263432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eac12ae41f87fef48abcee4643fa2e5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncryptManagerManual
+  hashInput: {fileID: 2041285463}
 --- !u!1 &907645298
 GameObject:
   m_ObjectHideFlags: 0
@@ -2887,8 +2887,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 820263434}
-        m_TargetAssemblyTypeName: HashManager, Assembly-CSharp
+      - m_Target: {fileID: 820263436}
+        m_TargetAssemblyTypeName: HashManaherManual, Assembly-CSharp
         m_MethodName: CopyHash
         m_Mode: 1
         m_Arguments:
@@ -3062,8 +3062,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 820263433}
-        m_TargetAssemblyTypeName: EncryptManager, Assembly-CSharp
+      - m_Target: {fileID: 820263437}
+        m_TargetAssemblyTypeName: EncryptManagerManual, Assembly-CSharp
         m_MethodName: EncryptHash
         m_Mode: 1
         m_Arguments:
@@ -3847,8 +3847,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 820263434}
-        m_TargetAssemblyTypeName: HashManager, Assembly-CSharp
+      - m_Target: {fileID: 820263436}
+        m_TargetAssemblyTypeName: HashManaherManual, Assembly-CSharp
         m_MethodName: GenerateHash
         m_Mode: 1
         m_Arguments:
@@ -4103,7 +4103,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 125411465}
         m_TargetAssemblyTypeName: TCPServerUI, Assembly-CSharp
-        m_MethodName: SendServerMessage
+        m_MethodName: SendSignedManualData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

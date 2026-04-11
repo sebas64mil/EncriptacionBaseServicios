@@ -3,24 +3,23 @@ using System.Security.Cryptography;
 using UnityEngine;
 using TMPro;
 
-public class DecryptManager : MonoBehaviour
+public class DecryptManager : MonoBehaviour, IDecryptManager
 {
     [Header("References")]
-    public EncryptManager encryptManager;  // todavía puede usarse localmente, pero ahora aceptamos llave pública remota
+    public EncryptManager encryptManager;
 
     private string decryptedResult;
 
-    // Campos donde almacenamos lo que llega desde el servidor (cliente)
     private string receivedHashHex;
     private string receivedSignatureB64;
     private byte[] receivedModulus;
     private byte[] receivedExponent;
 
-    // Método público para que UI_TCPClient pase lo que vino del servidor
     public void SetReceivedData(string hashHex, string signatureBase64, string modulusBase64, string exponentBase64)
     {
         receivedHashHex = hashHex;
         receivedSignatureB64 = signatureBase64;
+
         try
         {
             receivedModulus = string.IsNullOrEmpty(modulusBase64) ? null : Convert.FromBase64String(modulusBase64);
@@ -35,9 +34,8 @@ public class DecryptManager : MonoBehaviour
         }
     }
 
-    public void DecryptHash() // Verifies the signature using the public key recibido _/\_ Verifica la firma usando la llave pública recibida
+    public void DecryptHash()
     {
-        // Necesitamos la firma y el hash; la llave pública puede venir remota o local (encryptManager)
         if (string.IsNullOrEmpty(receivedHashHex) || string.IsNullOrEmpty(receivedSignatureB64))
         {
             Debug.Log("[DecryptManager] No hay hash o firma recibida para verificar");
@@ -51,7 +49,6 @@ public class DecryptManager : MonoBehaviour
 
             RSAParameters pubParams;
 
-            // Si llegó la llave pública desde el servidor, úsala
             if (receivedModulus != null && receivedExponent != null)
             {
                 pubParams = new RSAParameters { Modulus = receivedModulus, Exponent = receivedExponent };
@@ -59,7 +56,6 @@ public class DecryptManager : MonoBehaviour
             }
             else if (encryptManager != null)
             {
-                // Fallback: usar la llave pública local en escena
                 pubParams = encryptManager.GetPublicKeyParameters();
                 Debug.Log("[DecryptManager] No llegó llave remota; usando llave pública local de EncryptManager");
             }
@@ -89,13 +85,9 @@ public class DecryptManager : MonoBehaviour
                 decryptedResult = isValid ? receivedHashHex.ToLowerInvariant() : null;
 
                 if (isValid)
-                {
                     Debug.Log($"[DecryptManager] mensaje verificado: {decryptedResult}");
-                }
                 else
-                {
                     Debug.Log("[DecryptManager] Firma inválida");
-                }
             }
         }
         catch (Exception ex)
@@ -104,7 +96,7 @@ public class DecryptManager : MonoBehaviour
         }
     }
 
-    public void CopyDecrypted() // Copy the decrypted result to the clipboard _/\_ Copia el resultado al portapapeles
+    public void CopyDecrypted()
     {
         if (!string.IsNullOrEmpty(decryptedResult))
         {
@@ -118,7 +110,7 @@ public class DecryptManager : MonoBehaviour
         return decryptedResult;
     }
 
-    private static byte[] HexStringToByteArray(string hex) // Converts hex string to byte array _/\_ Convierte cadena hex a arreglo de bytes
+    private static byte[] HexStringToByteArray(string hex)
     {
         if (string.IsNullOrEmpty(hex))
             return Array.Empty<byte>();

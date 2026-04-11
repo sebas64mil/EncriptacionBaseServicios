@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 using TMPro;
 
-public class EncryptManager : MonoBehaviour
+public class EncryptManager : MonoBehaviour, IEncryptManager
 {
     [Header("UI")]
     public TMP_InputField hashInput;
@@ -11,17 +11,15 @@ public class EncryptManager : MonoBehaviour
     private RSA rsa;
     private string encryptedText;
 
-    private void Awake() // An instance is created and the key size is determined _/\_ Se crea una instancia y determina el tamaño de la clave 
+    private void Awake()
     {
         rsa = RSA.Create();
-        rsa.KeySize = 2048; 
+        rsa.KeySize = 2048;
     }
 
     public void EncryptHash()
     {
- 
-
-        try // Convert the hash to bytes, sign it with the private key, and convert it to text _/\_ Convierte el hash a bytes, firma con la clave privada y lo convierte a texto
+        try
         {
             byte[] hashBytes = HexStringToByteArray(hashInput.text);
 
@@ -34,12 +32,13 @@ public class EncryptManager : MonoBehaviour
             encryptedText = Convert.ToBase64String(firma);
             Debug.Log($"[EncryptManager] firma = {encryptedText}");
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.LogError("[EncryptManager] Error firmando: " + ex.Message);
         }
     }
 
-    public void CopyEncrypted() // Copy the encrypted text to the clipboard _/\_ Copia el texto encriptado al portapapeles
+    public void CopyEncrypted()
     {
         if (!string.IsNullOrEmpty(encryptedText))
         {
@@ -48,16 +47,10 @@ public class EncryptManager : MonoBehaviour
         }
     }
 
-    public RSA GetRSA() 
-    {
-        return rsa;
-    }
-
     public RSAParameters GetPublicKeyParameters()
     {
-        return rsa.ExportParameters(false); 
+        return rsa.ExportParameters(false);
     }
-
 
     public string CreateSignedPayload(string hashHex)
     {
@@ -75,7 +68,7 @@ public class EncryptManager : MonoBehaviour
         return $"{hashHex}|{signatureB64}|{modulusB64}|{exponentB64}";
     }
 
-    private static byte[] HexStringToByteArray(string hex) // class used to convert to a byte array _/\_ clase que se usa para convertir a un arreglo de bytes
+    private static byte[] HexStringToByteArray(string hex)
     {
         if (string.IsNullOrEmpty(hex))
             return Array.Empty<byte>();

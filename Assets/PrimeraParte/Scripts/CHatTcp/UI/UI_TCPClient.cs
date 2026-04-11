@@ -7,10 +7,10 @@ public class UI_TCPClient : MonoBehaviour
     public int serverPort = 5555;
     public string serverAddress = "127.0.0.1";
     [SerializeField] private TCPClient clientReference;
-    [SerializeField] private TMP_InputField messageInput;
+    
+    [SerializeField] private MonoBehaviour decryptManagerBehaviour;
 
-    // Nueva referencia a DecryptManager para pasarle lo que llega del servidor
-    [SerializeField] private DecryptManager decryptManager;
+    private IDecryptManager decryptManager;
 
     private IClient _client;
     private string lastReceivedMessage;
@@ -18,39 +18,27 @@ public class UI_TCPClient : MonoBehaviour
     void Awake()
     {
         _client = clientReference;
+
+        decryptManager = decryptManagerBehaviour as IDecryptManager;
+        if (decryptManager == null)
+            Debug.LogWarning("[UI-Client] decryptManagerBehaviour no implementa IDecryptManager (asigna un componente válido)");
     }
     void Start()
     {
-        _client.OnMessageReceived += HandleMessageReceived;
-        _client.OnConnected += HandleConnection;
-        _client.OnDisconnected += HandleDisconnection;
+        if (_client != null)
+        {
+            _client.OnMessageReceived += HandleMessageReceived;
+            _client.OnConnected += HandleConnection;
+            _client.OnDisconnected += HandleDisconnection;
+        }
     }
 
     public void ConnectClient()
     {
-        _client.ConnectToServer(serverAddress, serverPort);
+        _client?.ConnectToServer(serverAddress, serverPort);
     }
 
-    public void SendClientMessage()
-    {
-        if (!_client.isConnected)
-        {
-            Debug.Log("The client is not connected");
-            return;
-        }
-
-        // Verifica si el input está asignado o su texto es nulo/vacío
-        if (messageInput == null || string.IsNullOrEmpty(messageInput.text))
-        {
-            Debug.Log("El campo de entrada del chat está vacío o no está asignado");
-            return;
-        }
-
-        string message = messageInput.text;
-        _client.SendMessageAsync(message);
-    }
-
-    // Método para copiar el último mensaje recibido del servidor al portapapeles
+ 
     public void CopyLastServerMessage()
     {
         if (string.IsNullOrEmpty(lastReceivedMessage))
@@ -68,7 +56,6 @@ public class UI_TCPClient : MonoBehaviour
         lastReceivedMessage = text;
         Debug.Log("[UI-Client] Message received from server: " + text);
 
-        // Intentar parsear el payload con el formato: hashHex|signatureB64|modulusB64|exponentB64
         try
         {
             string[] parts = text.Split('|');
@@ -86,7 +73,7 @@ public class UI_TCPClient : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("[UI-Client] decryptManager no asignado en el inspector");
+                    Debug.LogWarning("[UI-Client] decryptManager no asignado en el inspector o no implementa IDecryptManager");
                 }
             }
             else
