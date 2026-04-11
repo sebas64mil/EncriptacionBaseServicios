@@ -73,7 +73,7 @@ public class DecryptManagerManual : MonoBehaviour, IDecryptManager
                 exponentToUse
             );
 
-            decryptedResult = isValid ? receivedHashHex.ToLowerInvariant() : null;
+            decryptedResult = isValid ? receivedHashHex : null;
 
             if (isValid)
                 Debug.Log($"[DecryptManagerManual]  Mensaje verificado: {decryptedResult}");
