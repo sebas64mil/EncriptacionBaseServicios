@@ -30,7 +30,7 @@ public class HashManager : MonoBehaviour, IHashManager
         if (!string.IsNullOrEmpty(lastHash))
         {
             GUIUtility.systemCopyBuffer = lastHash;
-            Debug.Log("Hash copiado");
+            Debug.Log("Hash copied");
         }
     }
 

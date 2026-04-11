@@ -24,13 +24,13 @@ public class DecryptManager : MonoBehaviour, IDecryptManager
         {
             receivedModulus = string.IsNullOrEmpty(modulusBase64) ? null : Convert.FromBase64String(modulusBase64);
             receivedExponent = string.IsNullOrEmpty(exponentBase64) ? null : Convert.FromBase64String(exponentBase64);
-            Debug.Log("[DecryptManager] Datos recibidos almacenados");
+            Debug.Log("[DecryptManager] Received data stored");
         }
         catch (Exception ex)
         {
             receivedModulus = null;
             receivedExponent = null;
-            Debug.LogError("[DecryptManager] Error al decodificar parámetros públicos: " + ex.Message);
+            Debug.LogError("[DecryptManager] Error decoding public parameters: " + ex.Message);
         }
     }
 
@@ -38,7 +38,7 @@ public class DecryptManager : MonoBehaviour, IDecryptManager
     {
         if (string.IsNullOrEmpty(receivedHashHex) || string.IsNullOrEmpty(receivedSignatureB64))
         {
-            Debug.Log("[DecryptManager] No hay hash o firma recibida para verificar");
+            Debug.Log("[DecryptManager] No hash or signature received to verify");
             return;
         }
 
@@ -52,22 +52,22 @@ public class DecryptManager : MonoBehaviour, IDecryptManager
             if (receivedModulus != null && receivedExponent != null)
             {
                 pubParams = new RSAParameters { Modulus = receivedModulus, Exponent = receivedExponent };
-                Debug.Log("[DecryptManager] Usando llave pública recibida del servidor");
+                Debug.Log("[DecryptManager] Using public key received from server");
             }
             else if (encryptManager != null)
             {
                 pubParams = encryptManager.GetPublicKeyParameters();
-                Debug.Log("[DecryptManager] No llegó llave remota; usando llave pública local de EncryptManager");
+                Debug.Log("[DecryptManager] Remote key not received; using local EncryptManager public key");
             }
             else
             {
-                Debug.LogWarning("[DecryptManager] No hay llave pública disponible (ni remota ni local)");
+                Debug.LogWarning("[DecryptManager] No public key available (neither remote nor local)");
                 return;
             }
 
             if (pubParams.Modulus == null || pubParams.Exponent == null)
             {
-                Debug.LogWarning("[DecryptManager] Parámetros públicos incompletos");
+                Debug.LogWarning("[DecryptManager] Public parameters incomplete");
                 return;
             }
 
@@ -85,14 +85,14 @@ public class DecryptManager : MonoBehaviour, IDecryptManager
                 decryptedResult = isValid ? receivedHashHex.ToLowerInvariant() : null;
 
                 if (isValid)
-                    Debug.Log($"[DecryptManager] mensaje verificado: {decryptedResult}");
+                    Debug.Log($"[DecryptManager] message verified: {decryptedResult}");
                 else
-                    Debug.Log("[DecryptManager] Firma inválida");
+                    Debug.Log("[DecryptManager] Invalid signature");
             }
         }
         catch (Exception ex)
         {
-            Debug.LogError("[DecryptManager] Error verificando firma: " + ex.Message);
+            Debug.LogError("[DecryptManager] Error verifying signature: " + ex.Message);
         }
     }
 
@@ -101,7 +101,7 @@ public class DecryptManager : MonoBehaviour, IDecryptManager
         if (!string.IsNullOrEmpty(decryptedResult))
         {
             GUIUtility.systemCopyBuffer = decryptedResult;
-            Debug.Log("Desencriptado copiado");
+            Debug.Log("Decrypted copied");
         }
     }
 
@@ -120,7 +120,7 @@ public class DecryptManager : MonoBehaviour, IDecryptManager
             hex = hex.Substring(2);
 
         if (hex.Length % 2 != 0)
-            throw new FormatException("Longitud de cadena hex inválida.");
+            throw new FormatException("Invalid hex string length.");
 
         int len = hex.Length / 2;
         byte[] result = new byte[len];

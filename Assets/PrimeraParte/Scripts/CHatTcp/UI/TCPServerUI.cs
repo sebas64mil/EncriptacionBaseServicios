@@ -17,15 +17,14 @@ public class TCPServerUI : MonoBehaviour
     {
         _server = serverReference;
 
-        // Cast behaviours to interfaces
         hashManager = hashManagerBehaviour as IHashManager;
         encryptManager = encryptManagerBehaviour as IEncryptManager;
 
         if (hashManager == null)
-            Debug.LogError("[UI-Server] hashManagerBehaviour no implementa IHashManager (asigna un componente válido)");
+            Debug.LogError("[UI-Server] hashManagerBehaviour does not implement IHashManager. Assign a valid component.");
 
         if (encryptManager == null)
-            Debug.LogError("[UI-Server] encryptManagerBehaviour no implementa IEncryptManager (asigna un componente válido)");
+            Debug.LogError("[UI-Server] encryptManagerBehaviour does not implement IEncryptManager. Assign a valid component.");
     }
     void Start()
     {
@@ -44,26 +43,26 @@ public class TCPServerUI : MonoBehaviour
     {
         if (_server == null || !_server.isServerRunning)
         {
-            Debug.Log("[UI-Server] El servidor no está en ejecución");
+            Debug.Log("[UI-Server] Server is not running");
             return;
         }
 
         if (hashManager == null)
         {
-            Debug.LogWarning("[UI-Server] hashManager no asignado o no implementa IHashManager");
+            Debug.LogWarning("[UI-Server] hashManager is not assigned or does not implement IHashManager");
             return;
         }
 
         string hashHex = hashManager.GetHash();
         if (string.IsNullOrEmpty(hashHex))
         {
-            Debug.Log("[UI-Server] No hay hash generado para enviar");
+            Debug.Log("[UI-Server] No hash generated to send");
             return;
         }
 
         if (encryptManager == null)
         {
-            Debug.LogWarning("[UI-Server] encryptManager no asignado o no implementa IEncryptManager");
+            Debug.LogWarning("[UI-Server] encryptManager is not assigned or does not implement IEncryptManager");
             return;
         }
 
@@ -74,25 +73,25 @@ public class TCPServerUI : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.Log("[UI-Server] Error creando payload firmado: " + ex.Message);
+            Debug.Log("[UI-Server] Error creating signed payload: " + ex.Message);
             return;
         }
 
         _server.SendMessageAsync(payload);
-        Debug.Log("[UI-Server] Payload enviado: " + payload);
+        Debug.Log("[UI-Server] Payload sent: " + payload);
     }
 
     public void SendSignedManualData()
     {
         if (_server == null || !_server.isServerRunning)
         {
-            Debug.Log("[UI-Server] El servidor no está en ejecución");
+            Debug.Log("[UI-Server] Server is not running");
             return;
         }
 
         if (hashManager == null || encryptManager == null)
         {
-            Debug.LogWarning("[UI-Server] Falta hashManager o encryptManager");
+            Debug.LogWarning("[UI-Server] Missing hashManager or encryptManager");
             return;
         }
 
@@ -100,7 +99,7 @@ public class TCPServerUI : MonoBehaviour
 
         if (string.IsNullOrEmpty(hashHex))
         {
-            Debug.Log("[UI-Server] No hay hash generado");
+            Debug.Log("[UI-Server] No hash generated");
             return;
         }
 
@@ -117,11 +116,11 @@ public class TCPServerUI : MonoBehaviour
 
             _server.SendMessageAsync(payload);
 
-            Debug.Log("[UI-Server] Payload MANUAL enviado: " + payload);
+            Debug.Log("[UI-Server] Manual payload sent: " + payload);
         }
         catch (Exception ex)
         {
-            Debug.Log("[UI-Server] Error enviando datos manuales: " + ex.Message);
+            Debug.Log("[UI-Server] Error sending manual data: " + ex.Message);
         }
     }
 
@@ -132,10 +131,10 @@ public class TCPServerUI : MonoBehaviour
 
     void HandleConnection()
     {
-        Debug.Log("[UI-Server] Client Connected to Server");
+        Debug.Log("[UI-Server] Client connected to server");
     }
     void HandleDisconnection()
     {
-        Debug.Log("[UI-Server] Client Disconnect from Server");
+        Debug.Log("[UI-Server] Client disconnected from server");
     }
 }

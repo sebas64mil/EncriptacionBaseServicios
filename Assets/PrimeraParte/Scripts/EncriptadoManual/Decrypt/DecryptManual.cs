@@ -30,7 +30,7 @@ public static class DecryptManual
                 if (c >= '0' && c <= '9') v = c - '0';
                 else if (c >= 'A' && c <= 'F') v = c - 'A' + 10;
                 else if (c >= 'a' && c <= 'f') v = c - 'a' + 10;
-                else throw new ArgumentException("hashHex contiene caracteres no hexadecimales");
+                else throw new ArgumentException("hashHex contains non-hexadecimal characters");
 
                 result = (result << 4) | v;
             }
@@ -55,13 +55,13 @@ public static class DecryptManual
 
             BigInteger resultado = BigInteger.ModPow(firma, e, n);
 
-            Debug.Log($"[DecryptManual] firma={firma} resultado={resultado} esperadoFull={esperadoFull} esperado(mod n)={esperado} n={n} e={e}");
+            Debug.Log($"[DecryptManual] signature={firma} result={resultado} expectedFull={esperadoFull} expected(mod n)={esperado} n={n} e={e}");
 
             return resultado == esperado;
         }
         catch (Exception ex)
         {
-            Debug.LogError("[DecryptManual] Error verificando firma: " + ex.Message);
+            Debug.LogError("[DecryptManual] Error verifying signature: " + ex.Message);
             return false;
         }
     }
